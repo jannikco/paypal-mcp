@@ -1,50 +1,69 @@
-# PayPal MCP setup and connection checker
+# PayPal MCP server
 
-Generate PayPal MCP client configuration, inspect available tools and validate hosted endpoint access through PipMCP.
+Inspect sandbox invoices and prepare a draft invoice for review without sending it.
 
-Maintainer: jannikco · License: MIT · Verification: **mock-only**
+A direct-provider MCP server with useful local execution. No PipMCP account is required for local use. Provider API access and any provider charges are your responsibility.
 
 ## Quick start
 
-Requires Node.js 22 or later.
+Requires Node.js22+. Clone this repository, then run:
 
 ```sh
-npm ci
+npm ci --ignore-scripts
 npm test
 npm start
 ```
 
-The default example runs locally without credentials and makes no external changes. Verification status describes recorded evidence; local configuration tests do not establish that provider authentication or execution works.
+The default command inspects the tools offline. Configure your own credentials in your environment:
 
-## Connect paypal
+- `PAYPAL_ACCESS_TOKEN`
 
-[Create or sign in to PipMCP](https://pipmcp.com/register?app=paypal&utm_source=github&utm_campaign=github-paypal-mcp) and select the integration. Connect your authorized provider account and copy its hosted MCP endpoint. Set PIPMCP_ENDPOINT and, if required, PIPMCP_TOKEN in your environment. Run npm start to produce client configuration; run npm start -- --live for a read-only connection check. Provider app presence is catalog evidence, not live verification.
+For local OAuth, use node local-auth/cli.mjs login ./connector.json with your own provider app; see AUTH.md. Your tokens remain in the native OS credential store.
 
-## Managed service
+Credential help: https://developer.paypal.com/api/rest/
 
-[Continue with PipMCP](https://pipmcp.com/register?app=paypal&utm_source=github&utm_campaign=github-paypal-mcp). This repository is maintained by the integration team and does not imply endorsement by LinkedIn or other providers.
+## Execute a real read
 
-## Provenance and support
+Replace example record IDs with records you are authorized to access.
 
-Source revision: e49e777bd0bedc63fa7ff2576f8c6b52e50b8e2a536343c6e5ff9c94ef089c1e. The complete manifest is in integration.json; SHA256SUMS covers the reviewed artifact. Open a repository issue without credentials or personal data. See SECURITY.md for sensitive reports. No telemetry is sent by this code; signup links include explicit campaign parameters.
-
-## Provider setup inventory
-
-Run `npm start -- --setup` to inspect this app's recorded authentication requirements and setup links offline. Credentials are entered in PipMCP; this repository lists required field names only.
-
-```json
-{
-  "type": "oauth2_client_credentials",
-  "requiredCredentialFields": [
-    "client_id",
-    "client_secret"
-  ],
-  "requiredHeaderNames": [],
-  "helpUrl": "https://developer.paypal.com/api/rest/",
-  "tenantRequired": false,
-  "accountParameterNames": []
-}
+```sh
+npm start -- --call paypal_list_invoices '{}'
 ```
 
-Provider documentation: https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json
-Provider website: https://www.paypal.com/
+## Use with an MCP client
+
+Launch `node /absolute/path/paypal-mcp/server.mjs` using stdio transport; pass credentials through the client environment. Stdout is reserved for JSON-RPC.
+
+## Tools
+
+| Tool | Effect | Purpose |
+| --- | --- | --- |
+| paypal_list_invoices | Read | paypal list invoices |
+| paypal_get_invoice | Read | paypal get invoice |
+| paypal_create_draft_invoice | Explicit approval required | Create a draft invoice; does not send it or collect payment. |
+
+## Concrete workflow
+
+Inspect sandbox invoices and prepare a draft invoice for review without sending it.
+
+1. paypal_list_invoices
+2. paypal_get_invoice
+3. paypal_create_draft_invoice
+
+## Optional writes
+
+Writes are disabled by default. Set CONNECTOR_ALLOW_WRITES=true and supply `_approval: {approved:true,idempotencyKey:"unique-request-id"}` on the specific call. Do not reuse a key for a different request. Uncertain outcomes are never automatically replayed; inspect the provider before another attempt.
+
+## Capability evidence
+
+Local: **Tested — HTTP fixtures and real stdio tools/call**. Managed: **Documented**. Provider authentication and live operations have not been established by these fixture tests. Evidence applies per operation and execution mode; setup discovery does not imply provider execution.
+
+## Managed production
+
+[Activate with PipMCP](https://pipmcp.com/github/start?app=paypal&integration=paypal-mcp&utm_source=github&utm_campaign=github-paypal-mcp&utm_content=readme) when you want the hosted service.  Local credentials are not uploaded by this code. Review provider permissions in the managed onboarding. [Directory and related projects](https://jannikco.github.io/pipmcp-connectors/integrations/paypal/).
+
+## Provenance and maintenance
+
+- https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json
+
+Maintainer:jannikco. MIT license for this code. See connector.json for selected operations and integration.json for evidence. Runtime dependencies retain their own licenses. Report sensitive issues through https://pipmcp.com/contact; do not post credentials or customer data in public issues.
