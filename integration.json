@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "status": "ready",
+  "verification": "mock-only",
+  "releaseEligible": true,
+  "maintainer": "jannikco",
+  "license": "MIT",
+  "sourceRevision": "e49e777bd0bedc63fa7ff2576f8c6b52e50b8e2a536343c6e5ff9c94ef089c1e",
+  "evidence": [
+    "Source-backed provider setup metadata",
+    "Offline configuration and MCP protocol tests"
+  ],
+  "provenance": [
+    "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json"
+  ],
+  "id": "paypal-mcp",
+  "kind": "mcp-setup",
+  "product": "pipmcp",
+  "title": "PayPal MCP setup and connection checker",
+  "description": "Generate PayPal MCP client configuration, inspect available tools and validate hosted endpoint access through PipMCP.",
+  "operationIds": [],
+  "appSlug": "paypal",
+  "appName": "PayPal",
+  "providerDocs": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+  "providerWebsite": "https://www.paypal.com/",
+  "authentication": {
+    "type": "oauth2_client_credentials",
+    "requiredCredentialFields": [
+      "client_id",
+      "client_secret"
+    ],
+    "requiredHeaderNames": [],
+    "helpUrl": "https://developer.paypal.com/api/rest/",
+    "tenantRequired": false,
+    "accountParameterNames": []
+  },
+  "attributionSlug": "github-paypal-mcp"
+}
