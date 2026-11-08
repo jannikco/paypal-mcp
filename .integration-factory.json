@@ -1,382 +1,62 @@
 {
   "schemaVersion": 1,
-  "status": "ready",
-  "verification": "mock-only",
-  "releaseEligible": true,
-  "maintainer": "jannikco",
-  "license": "MIT",
-  "sourceRevision": "8c101be1af9ebbefd871325ff3b111e1922e2deb51bf6ef1d9b1231e196e9121",
-  "evidence": [
-    "Actual tools/call and direct-provider request contract tests"
-  ],
-  "provenance": [
-    "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json"
-  ],
   "id": "paypal-mcp",
   "kind": "provider-connector",
   "product": "pipmcp",
   "title": "PayPal MCP server",
-  "description": "Inspect sandbox invoices and prepare a draft invoice for review without sending it.",
-  "operationIds": [
-    "paypal_list_invoices",
-    "paypal_get_invoice",
-    "paypal_create_draft_invoice"
+  "description": "Use PayPal with AI agents through one PipMCP API key, actual hosted schemas and governed execution.",
+  "status": "ready",
+  "verification": "mock-only",
+  "releaseEligible": true,
+  "operationIds": [],
+  "maintainer": "jannikco",
+  "license": "MIT",
+  "attributionSlug": "github-paypal-mcp",
+  "sourceRevision": "a06998ba3262072899c411ba6ec6d86c47717a4aab118053f68f493202eadb3c",
+  "qualityVersion": 2,
+  "artifactType": "connector",
+  "evidence": [
+    "Gateway HTTP transport fixtures",
+    "Generated stdio wrapper discovery/call fixtures"
   ],
+  "provenance": [
+    "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json"
+  ],
+  "utility": {
+    "problem": "Inspect sandbox invoices and prepare a draft invoice for review without sending it.",
+    "output": "Actual hosted tool schemas and durable governed execution receipts"
+  },
   "appSlug": "paypal",
   "appName": "PayPal",
-  "providerDocs": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
-  "providerWebsite": "https://www.paypal.com/",
-  "authentication": {
-    "type": "oauth2_client_credentials",
-    "requiredCredentialFields": [
-      "client_id",
-      "client_secret"
-    ],
-    "settings": {
-      "scopes": "",
-      "token_url": "https://api-m.paypal.com/v1/oauth2/token"
-    },
-    "requiredHeaderNames": [],
-    "helpUrl": "https://developer.paypal.com/api/rest/",
-    "tenantRequired": false,
-    "accountParameterNames": []
-  },
-  "attributionSlug": "github-paypal-mcp",
-  "artifactType": "connector",
-  "qualityVersion": 2,
   "connectorId": "paypal",
-  "connector": {
-    "id": "paypal",
-    "name": "PayPal",
-    "version": "0.1.0",
-    "baseUrl": "https://api-m.sandbox.paypal.com",
-    "auth": {
-      "type": "oauth-access-token",
-      "env": "PAYPAL_ACCESS_TOKEN"
-    },
-    "tools": [
-      {
-        "name": "paypal_list_invoices",
-        "description": "paypal list invoices",
-        "method": "GET",
-        "path": "/v2/invoicing/invoices",
-        "readOnly": true,
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "page": {
-              "type": "integer",
-              "minimum": 1
-            },
-            "page_size": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100
-            }
-          },
-          "required": [],
-          "additionalProperties": false
-        },
-        "bindings": {
-          "path": [],
-          "query": {
-            "page": "page",
-            "page_size": "page_size"
-          },
-          "body": {}
-        },
-        "approvalRequired": false,
-        "provenance": [
-          "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json"
-        ],
-        "evidence": {
-          "state": "documented",
-          "providerLiveValidation": "not-run"
-        },
-        "sampleArguments": {}
-      },
-      {
-        "name": "paypal_get_invoice",
-        "description": "paypal get invoice",
-        "method": "GET",
-        "path": "/v2/invoicing/invoices/{invoice_id}",
-        "readOnly": true,
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "invoice_id": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "invoice_id"
-          ],
-          "additionalProperties": false
-        },
-        "bindings": {
-          "path": [
-            "invoice_id"
-          ],
-          "query": {},
-          "body": {}
-        },
-        "approvalRequired": false,
-        "provenance": [
-          "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json"
-        ],
-        "evidence": {
-          "state": "documented",
-          "providerLiveValidation": "not-run"
-        },
-        "sampleArguments": {
-          "invoice_id": "INV2-REPLACE-WITH-AUTHORIZED-ID"
-        }
-      },
-      {
-        "name": "paypal_create_draft_invoice",
-        "description": "Create a draft invoice; does not send it or collect payment.",
-        "method": "POST",
-        "path": "/v2/invoicing/invoices",
-        "readOnly": false,
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "detail": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "items": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": true
-              },
-              "minItems": 1
-            },
-            "primary_recipients": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": true
-              },
-              "minItems": 1
-            }
-          },
-          "required": [
-            "detail"
-          ],
-          "additionalProperties": false
-        },
-        "bindings": {
-          "path": [],
-          "query": {},
-          "body": {
-            "detail": "detail",
-            "items": "items",
-            "primary_recipients": "primary_recipients"
-          }
-        },
-        "approvalRequired": true,
-        "provenance": [
-          "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json"
-        ],
-        "evidence": {
-          "state": "documented",
-          "providerLiveValidation": "not-run"
-        },
-        "sampleArguments": {
-          "detail": {
-            "currency_code": "USD"
-          }
-        }
-      }
-    ],
-    "workflow": {
-      "name": "paypal-workflow",
-      "description": "Inspect sandbox invoices and prepare a draft invoice for review without sending it.",
-      "steps": [
-        "paypal_list_invoices",
-        "paypal_get_invoice",
-        "paypal_create_draft_invoice"
-      ]
-    },
-    "provenance": [
-      "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json"
-    ],
-    "sourceEvidence": {
-      "state": "documented",
-      "providerLiveValidation": "not-run",
-      "checkedAt": "2026-11-08",
-      "operationCount": 3,
-      "kind": "official-openapi",
-      "sha256": "b38ec179b0a904eed50825cd0b456e788569dc3fdb6efd08e131751f7cc19f52"
-    },
-    "setup": {
-      "requiresPipMcpAccount": false,
-      "credentialsHelpUrl": "https://developer.paypal.com/api/rest/",
-      "instructions": "Create your own PayPal Sandbox app and set PAYPAL_CLIENT_ID plus PAYPAL_CLIENT_SECRET, then run local login. Alternatively supply PAYPAL_ACCESS_TOKEN. Default base and OAuth token endpoints are sandbox; switch both together only when intentionally using your live account."
-    },
-    "oauth": {
-      "grantType": "client_credentials",
-      "tokenUrl": "https://api-m.sandbox.paypal.com/v1/oauth2/token",
-      "clientIdEnv": "PAYPAL_CLIENT_ID",
-      "clientSecretEnv": "PAYPAL_CLIENT_SECRET",
-      "clientAuthentication": "basic"
-    },
-    "baseUrlOptions": [
-      "https://api-m.sandbox.paypal.com",
-      "https://api-m.paypal.com"
-    ],
-    "sampleWarning": "Example IDs are placeholders, not known provider records. Replace them with authorized sandbox/account IDs. Contact emails, file URLs and recipient numbers must be replaced with data you are authorized to use. Examples never authorize a write.",
-    "repoId": "paypal-mcp",
-    "appSlug": "paypal",
-    "product": "pipmcp",
-    "artifactType": "connector",
-    "sourceRevision": "8c101be1af9ebbefd871325ff3b111e1922e2deb51bf6ef1d9b1231e196e9121",
-    "capabilityEvidence": {
-      "local": {
-        "level": "Tested",
-        "operations": [
-          {
-            "name": "paypal_list_invoices",
-            "level": "Tested",
-            "evidenceRefs": [
-              "Provider request/stdio contract tests"
-            ],
-            "method": "contract-fixture"
-          },
-          {
-            "name": "paypal_get_invoice",
-            "level": "Tested",
-            "evidenceRefs": [
-              "Provider request/stdio contract tests"
-            ],
-            "method": "contract-fixture"
-          },
-          {
-            "name": "paypal_create_draft_invoice",
-            "level": "Tested",
-            "evidenceRefs": [
-              "Provider request/stdio contract tests"
-            ],
-            "method": "contract-fixture"
-          }
-        ],
-        "evidenceRefs": [
-          "Provider request/stdio contract tests"
-        ],
-        "mode": "local"
-      },
-      "managed": {
-        "level": "Documented",
-        "operations": [
-          {
-            "name": "paypal_list_invoices",
-            "level": "Documented",
-            "evidenceRefs": [],
-            "method": "documentation"
-          },
-          {
-            "name": "paypal_get_invoice",
-            "level": "Documented",
-            "evidenceRefs": [],
-            "method": "documentation"
-          },
-          {
-            "name": "paypal_create_draft_invoice",
-            "level": "Documented",
-            "evidenceRefs": [],
-            "method": "documentation"
-          }
-        ],
-        "evidenceRefs": [],
-        "mode": "managed"
-      }
-    },
-    "authentication": {
-      "type": "oauth2_client_credentials",
-      "requiredCredentialFields": [
-        "client_id",
-        "client_secret"
-      ],
-      "settings": {
-        "scopes": "",
-        "token_url": "https://api-m.paypal.com/v1/oauth2/token"
-      },
-      "requiredHeaderNames": [],
-      "helpUrl": "https://developer.paypal.com/api/rest/",
-      "tenantRequired": false,
-      "accountParameterNames": []
-    },
-    "managedAvailability": {
-      "status": "listed",
-      "checkedAt": "2026-11-08T12:29:10.433747+00:00"
-    }
-  },
+  "executionAuthority": "pipmcp-gateway",
+  "version": "1.0.0",
+  "agentReady": true,
   "capabilityEvidence": {
     "local": {
       "level": "Tested",
       "operations": [
         {
-          "name": "paypal_list_invoices",
+          "name": "gateway_transport",
           "level": "Tested",
+          "method": "contract-fixture",
           "evidenceRefs": [
-            "Provider request/stdio contract tests"
-          ],
-          "method": "contract-fixture"
-        },
-        {
-          "name": "paypal_get_invoice",
-          "level": "Tested",
-          "evidenceRefs": [
-            "Provider request/stdio contract tests"
-          ],
-          "method": "contract-fixture"
-        },
-        {
-          "name": "paypal_create_draft_invoice",
-          "level": "Tested",
-          "evidenceRefs": [
-            "Provider request/stdio contract tests"
-          ],
-          "method": "contract-fixture"
+            "Generated gateway/stdio fixtures"
+          ]
         }
       ],
       "evidenceRefs": [
-        "Provider request/stdio contract tests"
+        "Generated gateway/stdio fixtures"
       ],
       "mode": "local"
     },
     "managed": {
       "level": "Documented",
-      "operations": [
-        {
-          "name": "paypal_list_invoices",
-          "level": "Documented",
-          "evidenceRefs": [],
-          "method": "documentation"
-        },
-        {
-          "name": "paypal_get_invoice",
-          "level": "Documented",
-          "evidenceRefs": [],
-          "method": "documentation"
-        },
-        {
-          "name": "paypal_create_draft_invoice",
-          "level": "Documented",
-          "evidenceRefs": [],
-          "method": "documentation"
-        }
-      ],
+      "operations": [],
       "evidenceRefs": [],
       "mode": "managed"
     }
   },
-  "utility": {
-    "problem": "Inspect sandbox invoices and prepare a draft invoice for review without sending it.",
-    "output": "Actual provider API results through local MCP tools"
-  },
   "factory": "leadadapter-pipmcp",
-  "generatorVersion": 2
+  "generatorVersion": 3
 }

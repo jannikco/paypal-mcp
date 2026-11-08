@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "product": "pipmcp",
+  "credential": "PIPMCP_API_KEY",
+  "skills": [
+    {
+      "name": "pipmcp-paypal",
+      "description": "Connect AI agents to PayPal using one PipMCP API key and actual hosted tool discovery."
+    }
+  ],
+  "files": {
+    "skills/pipmcp-paypal/SKILL.md": "f0be0414980522ebebb23fdc98f18dd4c6abfca0832d739ee04bdd76f8533b5f"
+  }
+}
